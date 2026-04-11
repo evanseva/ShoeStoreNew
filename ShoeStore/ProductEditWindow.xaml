@@ -1,0 +1,61 @@
+﻿<Window x:Class="ShoeStore.ProductEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование товара" Height="550" Width="480"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Times New Roman" FontSize="14"
+        ResizeMode="NoResize">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20">
+
+            <TextBlock Text="Редактирование товара" 
+                       FontSize="18" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+            <!-- ID -->
+            <TextBlock Text="ID товара:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtId" IsReadOnly="True" Background="#F0F0F0" Margin="0,0,0,10" Height="30" Padding="5"/>
+
+            <!-- Название -->
+            <TextBlock Text="Название:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtName" Margin="0,0,0,10" Height="30" Padding="5"/>
+
+            <!-- Категория -->
+            <TextBlock Text="Категория:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <ComboBox Name="cmbCategory" Margin="0,0,0,10" Height="30" 
+                      DisplayMemberPath="name" SelectedValuePath="id"/>
+
+            <!-- Производитель -->
+            <TextBlock Text="Производитель:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <ComboBox Name="cmbManufacturer" Margin="0,0,0,10" Height="30"
+                      DisplayMemberPath="name" SelectedValuePath="id"/>
+
+            <!-- Поставщик -->
+            <TextBlock Text="Поставщик:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtSupplier" Margin="0,0,0,10" Height="30" Padding="5"/>
+
+            <!-- Цена -->
+            <TextBlock Text="Цена:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtPrice" Margin="0,0,0,10" Height="30" Padding="5"/>
+
+            <!-- Количество -->
+            <TextBlock Text="Количество на складе:" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtQuantity" Margin="0,0,0,10" Height="30" Padding="5"/>
+
+            <!-- Скидка -->
+            <TextBlock Text="Скидка (%):" Margin="0,8,0,2" FontWeight="Bold"/>
+            <TextBox Name="txtDiscount" Margin="0,0,0,20" Height="30" Padding="5"/>
+
+            <!-- Кнопки -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
+                <Button Content="Сохранить" Width="100" Height="35" Margin="5"
+                        Click="BtnSave_Click" Background="#00FA9A" Cursor="Hand"/>
+                <Button Content="Удалить" Width="100" Height="35" Margin="5"
+                        Name="btnDelete" Click="BtnDelete_Click" Background="#FF6B6B" Cursor="Hand"/>
+                <Button Content="Отмена" Width="100" Height="35" Margin="5"
+                        Click="BtnCancel_Click" Background="#CCCCCC" Cursor="Hand"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

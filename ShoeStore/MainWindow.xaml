@@ -1,0 +1,96 @@
+﻿<Window x:Class="ShoeStore.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Магазин обуви" Height="650" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Times New Roman" FontSize="14"
+        MinHeight="550" MinWidth="900">
+
+    <DockPanel>
+
+        <!-- Верхнее меню -->
+        <Border DockPanel.Dock="Top" Background="#7FFF00" Height="50">
+            <Grid Margin="15,0">
+                <!-- Логотип или название -->
+                <TextBlock Text="👟 Обувной магазин" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+
+                <!-- Информация о пользователе -->
+                <TextBlock Name="txtUserInfo" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                <!-- Правое меню с кнопками -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Name="btnOrders" Content="📋 Заказы" 
+                            Width="100" Height="30" Margin="5,0"
+                            Click="BtnOrders_Click" 
+                            Background="White" Cursor="Hand"
+                            Visibility="Collapsed"/>
+
+                    <Button Name="btnAddProduct" Content="➕ Добавить товар" 
+                            Width="130" Height="30" Margin="5,0"
+                            Click="BtnAddProduct_Click" 
+                            Background="White" Cursor="Hand"
+                            Visibility="Collapsed"/>
+
+                    <Button Name="btnLogout" Content="🚪 Выйти" 
+                            Width="80" Height="30" Margin="10,0,0,0"
+                            Click="BtnLogout_Click"
+                            Background="White" Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Панель фильтров -->
+        <Border DockPanel.Dock="Top" Name="panelFilters" 
+                Background="#F5F5F5" Height="80" Visibility="Collapsed"
+                BorderBrush="#DDD" BorderThickness="0,0,0,1">
+            <Grid Margin="15,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Text="🔍 Поиск:" FontWeight="Bold"/>
+                    <TextBox Name="txtSearch" Height="32" Margin="0,3,10,0" Padding="5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5">
+                    <TextBlock Text="📦 Фильтр по поставщику:" FontWeight="Bold"/>
+                    <ComboBox Name="cmbSupplier" Height="32" Margin="0,3,10,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                    <RadioButton Name="rbAsc" Content="📈 По возрастанию (кол-во)" Margin="10,0" GroupName="Sort" Checked="Sort_Changed"/>
+                    <RadioButton Name="rbDesc" Content="📉 По убыванию (кол-во)" Margin="10,0" GroupName="Sort" Checked="Sort_Changed"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Таблица товаров -->
+        <DataGrid Name="dgProducts" 
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  SelectionMode="Single" 
+                  MouseDoubleClick="DgProducts_MouseDoubleClick"
+                  Margin="10" FontSize="13"
+                  AlternatingRowBackground="#F9F9F9"
+                  RowHeight="35">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="50"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding name}" Width="200"/>
+                <DataGridTextColumn Header="Категория" Binding="{Binding category}" Width="120"/>
+                <DataGridTextColumn Header="Производитель" Binding="{Binding manufacturer}" Width="120"/>
+                <DataGridTextColumn Header="Поставщик" Binding="{Binding supplier}" Width="150"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding price}" Width="100"/>
+                <DataGridTextColumn Header="Кол-во" Binding="{Binding quantity}" Width="80"/>
+                <DataGridTextColumn Header="Скидка %" Binding="{Binding discount}" Width="80"/>
+                <DataGridTextColumn Header="Итоговая цена" Binding="{Binding final_price}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Строка статуса -->
+        <Border DockPanel.Dock="Bottom" Background="#F0F0F0" Height="30">
+            <TextBlock Name="txtStatus" Text="Готово" Margin="10" FontSize="11" Foreground="Gray" VerticalAlignment="Center"/>
+        </Border>
+    </DockPanel>
+</Window>
