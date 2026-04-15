@@ -88,6 +88,7 @@ namespace ShoeStore
             }
         }
 
+
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Удалить заказ?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)

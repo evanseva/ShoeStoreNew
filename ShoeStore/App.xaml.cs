@@ -4,5 +4,6 @@ namespace ShoeStore
 {
     public partial class App : Application
     {
+
     }
 }

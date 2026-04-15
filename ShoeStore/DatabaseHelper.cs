@@ -7,7 +7,7 @@ namespace ShoeStore
 {
     public class DatabaseHelper
     {
-        private string connectionString = "Host=localhost;Port=5432;Database=evans1;Username=postgres;Password=123456789;Encoding=UTF8;";
+        private string connectionString = "Host=localhost;Port=5432;Database=evans1;Username=postgres;Password=123456789; Encoding=UTF8;";
 
         public DataTable ExecuteQuery(string query, NpgsqlParameter[] parameters = null)
         {
