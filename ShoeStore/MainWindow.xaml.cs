@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Npgsql;
 
 namespace ShoeStore
@@ -9,29 +10,14 @@ namespace ShoeStore
     public partial class MainWindow : Window
     {
         DatabaseHelper db = new DatabaseHelper();
-        User currentUser;
         string currentSearch = "";
         string currentSupplier = "";
         string currentSort = "";
 
-        public MainWindow(User user)
+        public MainWindow()
         {
             InitializeComponent();
-            currentUser = user;
-            txtUserInfo.Text = user.FullName + " (" + user.Role + ")";
-
-            if (user.Role == "manager" || user.Role == "admin")
-            {
-                panelFilters.Visibility = Visibility.Visible;
-                btnOrders.Visibility = Visibility.Visible;
-                LoadSuppliers();
-            }
-
-            if (user.Role == "admin")
-            {
-                btnAddProduct.Visibility = Visibility.Visible;
-            }
-
+            LoadSuppliers();
             LoadProducts();
         }
 
@@ -63,6 +49,7 @@ namespace ShoeStore
                 string query = @"SELECT p.id, p.name, COALESCE(c.name, 'Нет') as category, 
                                         COALESCE(m.name, 'Нет') as manufacturer, 
                                         p.supplier, p.price, p.quantity, p.discount,
+                                        p.image_path,
                                         CASE WHEN p.discount > 0 THEN p.price * (100 - p.discount)/100 ELSE p.price END as final_price
                                  FROM products p
                                  LEFT JOIN categories c ON p.category_id = c.id
@@ -70,10 +57,10 @@ namespace ShoeStore
                                  WHERE 1=1";
 
                 if (!string.IsNullOrEmpty(currentSearch))
-                    query += " AND (p.name ILIKE '%" + currentSearch.Replace("'", "''") + "%')";
+                    query += " AND p.name ILIKE '%" + currentSearch + "%'";
 
                 if (!string.IsNullOrEmpty(currentSupplier) && currentSupplier != "Все поставщики")
-                    query += " AND p.supplier = '" + currentSupplier.Replace("'", "''") + "'";
+                    query += " AND p.supplier = '" + currentSupplier + "'";
 
                 if (currentSort == "asc")
                     query += " ORDER BY p.quantity ASC";
@@ -89,6 +76,32 @@ namespace ShoeStore
             catch (Exception ex)
             {
                 txtStatus.Text = "Ошибка: " + ex.Message;
+            }
+        }
+
+        private void DgProducts_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            DataRowView row = e.Row.DataContext as DataRowView;
+            if (row != null)
+            {
+                int discount = Convert.ToInt32(row["discount"]);
+                int quantity = Convert.ToInt32(row["quantity"]);
+
+                if (discount > 15)
+                {
+                    e.Row.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2E8B57"));
+                    e.Row.Foreground = Brushes.White;
+                }
+                else if (quantity == 0)
+                {
+                    e.Row.Background = Brushes.LightBlue;
+                    e.Row.Foreground = Brushes.Black;
+                }
+                else
+                {
+                    e.Row.Background = Brushes.White;
+                    e.Row.Foreground = Brushes.Black;
+                }
             }
         }
 
@@ -117,12 +130,6 @@ namespace ShoeStore
 
         private void DgProducts_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (currentUser.Role != "admin")
-            {
-                MessageBox.Show("Только администратор может редактировать товары", "Доступ запрещен", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             if (dgProducts.SelectedItem != null)
             {
                 DataRowView row = dgProducts.SelectedItem as DataRowView;
@@ -145,15 +152,8 @@ namespace ShoeStore
 
         private void BtnOrders_Click(object sender, RoutedEventArgs e)
         {
-            OrdersWindow ordersWin = new OrdersWindow(currentUser.Role);
+            OrdersWindow ordersWin = new OrdersWindow();
             ordersWin.ShowDialog();
-        }
-
-        private void BtnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            LoginWindow login = new LoginWindow();
-            login.Show();
-            this.Close();
         }
     }
 }
